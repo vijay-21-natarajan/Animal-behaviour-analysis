@@ -5,6 +5,6 @@ duckduckgo_search
 requests
 openpyxl
 opencv-python
-ultralytics
+ultralytics>=8.3.0
 yt-dlp
 pytube

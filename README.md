@@ -1,6 +1,6 @@
 # Animal Behaviour Analysis
 
-A comprehensive tool designed to analyze animal behaviour in videos using YOLOv8 computer vision and a React-based web interface.
+A comprehensive tool designed to analyze animal behaviour in videos using YOLOv11 computer vision and a React-based web interface.
 
 ## 🌟 Features
 - **Video Analysis**: Upload local videos or provide YouTube links for automated animal detection.
@@ -24,7 +24,7 @@ animal-behaviour/
 │   └── main.jsx          # React entry point
 ├── static/               # Processed videos and analysis results
 ├── templates/            # HTML templates (if used)
-└── yolov8n.pt            # Pre-trained YOLO model
+└── yolo11n.pt            # Pre-trained YOLOv11 model
 ```
 
 ---
@@ -68,6 +68,6 @@ animal-behaviour/
 ---
 
 ## 🧪 Technologies Used
-- **Backend**: Flask, OpenCV, Pandas, Ultralytics (YOLOv8), yt-dlp.
+- **Backend**: Flask, OpenCV, Pandas, Ultralytics (YOLOv11), yt-dlp.
 - **Frontend**: React 19, Vite, Axios.
-- **Computer Vision**: YOLOv8 for object detection and tracking.
+- **Computer Vision**: YOLOv11 for object detection and tracking.

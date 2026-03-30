@@ -419,7 +419,7 @@ def analyze_animal_behavior(video_path, outdir="static"):
 
     # Initialize YOLO model
     try:
-        model = YOLO("yolov8n.pt")  # Small YOLO model
+        model = YOLO("yolo11n.pt")  # Updated to YOLOv11
         print("✅ YOLO model loaded successfully")
     except Exception as e:
         print(f"❌ Failed to load YOLO model: {e}")
@@ -438,9 +438,15 @@ def analyze_animal_behavior(video_path, outdir="static"):
     print(f"📹 Video properties: {frame_width}x{frame_height}, {fps:.2f} FPS")
 
     # Save annotated video
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    # Use avc1 (H.264) for better web compatibility
+    fourcc = cv2.VideoWriter_fourcc(*"avc1")
     out_video = os.path.join(outdir, "annotated_video.mp4")
     writer = cv2.VideoWriter(out_video, fourcc, fps, (frame_width, frame_height))
+    
+    if not writer.isOpened():
+        print("⚠️ Warning: AVC1 codec failed, falling back to mp4v")
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        writer = cv2.VideoWriter(out_video, fourcc, fps, (frame_width, frame_height))
 
     behavior_log = []
     frame_count = 0
@@ -603,14 +609,35 @@ def analyze_animal_behavior(video_path, outdir="static"):
     except Exception as e:
         print(f"❌ Failed to save CSV to {csv_path}: {e}")
 
-    # Generate summary only when we have data
+    # Generate summary stats for charts
+    stats = {
+        "behavior_distribution": [],
+        "animal_distribution": [],
+        "confidence_distribution": [] # Simplified for now, or use bins
+    }
+
     if behavior_log:
+        df = pd.DataFrame(behavior_log)
+        
+        # Behavior counts
+        b_counts = df['behavior'].value_counts().to_dict()
+        stats["behavior_distribution"] = [{"name": k, "value": int(v)} for k, v in b_counts.items()]
+        
+        # Animal counts
+        a_counts = df['label'].value_counts().to_dict()
+        stats["animal_distribution"] = [{"name": k, "value": int(v)} for k, v in a_counts.items()]
+        
+        # Confidence bins (0.5 to 1.0)
+        bins = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        conf_counts = pd.cut(df['confidence'], bins=bins).value_counts().sort_index()
+        stats["confidence_distribution"] = [{"range": f"{bins[i]}-{bins[i+1]}", "count": int(v)} for i, v in enumerate(conf_counts)]
+
         generate_analysis_summary(behavior_log, frame_count, fps)
     else:
         print("❌ No animal behaviors detected in the video")
 
-    # Return both behavior_log and csv path for programmatic use
-    return behavior_log, csv_path
+    # Return behavior_log, csv path, and stats
+    return behavior_log, csv_path, stats
 
 
 def generate_analysis_summary(behavior_log, total_frames, fps):

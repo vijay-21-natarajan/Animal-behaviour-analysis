@@ -30,8 +30,8 @@ def download_and_analyze(url, outdir, task_id):
         _set_task(task_id, {"status": "downloading"})
         video_path = download_youtube_video(url, output_path=outdir)
         _set_task(task_id, {"status": "analyzing"})
-        behavior_log, csvpath = analyze_animal_behavior(video_path, outdir=outdir)
-
+        behavior_log, csvpath, stats = analyze_animal_behavior(video_path, outdir=outdir)
+        
         annotated = os.path.join(outdir, "annotated_video.mp4")
         log = behavior_log or []
 
@@ -43,7 +43,10 @@ def download_and_analyze(url, outdir, task_id):
             "annotatedVideoUrl": annotated_url,
             "csvUrl": csv_url,
             "log": log,
-            "summary": {"count": len(log)}
+            "summary": {
+                "count": len(log),
+                "charts": stats
+            }
         })
     except Exception as e:
         _set_task(task_id, {"status": "error", "error": str(e)})
@@ -107,7 +110,7 @@ def process_file():
                 })
                 return
 
-            behavior_log, csvpath = analyze_animal_behavior(path, outdir=outdir)
+            behavior_log, csvpath, stats = analyze_animal_behavior(path, outdir=outdir)
             annotated = os.path.join(outdir, "annotated_video.mp4")
             log = behavior_log or []
 
@@ -116,7 +119,10 @@ def process_file():
                 "annotatedVideoUrl": f"/static/{task_id}/annotated_video.mp4" if os.path.exists(annotated) else None,
                 "csvUrl": f"/static/{task_id}/animal_behavior_log.csv" if os.path.exists(csvpath) else None,
                 "log": log,
-                "summary": {"count": len(log)}
+                "summary": {
+                    "count": len(log),
+                    "charts": stats
+                }
             })
         except Exception as e:
             _set_task(task_id, {"status": "error", "error": str(e)})
