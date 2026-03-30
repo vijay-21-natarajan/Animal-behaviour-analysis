@@ -1,0 +1,84 @@
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+  font-family: system-ui;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form {
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+.btn {
+  padding: 10px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #005ecb;
+}
+
+.loading {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.media {
+  width: 100%;
+  max-width: 700px;
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #0c0c0c39;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th {
+  background: #111415ff;
+}
+
+.csv {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}

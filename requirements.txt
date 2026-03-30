@@ -1,0 +1,10 @@
+flask-cors
+pandas
+flask
+duckduckgo_search
+requests
+openpyxl
+opencv-python
+ultralytics
+yt-dlp
+pytube
