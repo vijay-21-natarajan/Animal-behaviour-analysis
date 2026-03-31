@@ -13,6 +13,15 @@ const MODEL_COMPARISON_DATA = [
   { name: "YOLO11n (Used)", map: 39.4, speed: 1.1, params: 2.6 },
 ];
 
+function getYouTubeEmbedUrl(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11)
+    ? `https://www.youtube.com/embed/${match[2]}`
+    : null;
+}
+
 export default function App() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [file, setFile] = useState(null);
@@ -216,14 +225,33 @@ export default function App() {
 
       <div className="forms">
         <form onSubmit={submitFile} className="form">
-          <input
-            ref={fileInputRef}
-            className="input"
-            type="file"
-            accept="video/*,image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          <button className="btn">Upload & Analyze</button>
+          <div className="form-group">
+            <label>Upload Local Video/Image</label>
+            <input
+              ref={fileInputRef}
+              className="input"
+              type="file"
+              accept="video/*,image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </div>
+          <button className="btn">Analyze File</button>
+        </form>
+
+        <div className="form-separator">OR</div>
+
+        <form onSubmit={submitYouTube} className="form">
+          <div className="form-group">
+            <label>Analyze YouTube Link</label>
+            <input
+              className="input"
+              type="text"
+              placeholder="Paste YouTube URL here..."
+              value={youtubeUrl}
+              onChange={(e) => setYoutubeUrl(e.target.value)}
+            />
+          </div>
+          <button className="btn youtube-btn">Analyze Link</button>
         </form>
       </div>
 
@@ -237,6 +265,15 @@ export default function App() {
               <div className="media-container">
                 {file?.type?.startsWith("image") ? (
                   <img className="media" src={originalPreview} alt="original" />
+                ) : getYouTubeEmbedUrl(originalPreview) ? (
+                  <iframe
+                    className="media youtube-preview"
+                    src={getYouTubeEmbedUrl(originalPreview)}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 ) : (
                   <video className="media" controls src={originalPreview} />
                 )}

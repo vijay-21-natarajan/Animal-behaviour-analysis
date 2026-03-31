@@ -28,11 +28,35 @@
 }
 
 .input {
-  width: 300px;
+  width: 100%;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+  box-sizing: border-box;
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.form-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #999;
+  padding: 0 20px;
+}
+
 
 .btn {
   padding: 10px 24px;
@@ -47,6 +71,14 @@
 
 .btn:hover {
   background: #005ecb;
+}
+
+.youtube-btn {
+  background: #ff0000;
+}
+
+.youtube-btn:hover {
+  background: #cc0000;
 }
 
 .loading-container {
@@ -204,4 +236,8 @@
   .main-grid {
     flex-direction: column;
   }
+}
+
+.youtube-preview {
+  aspect-ratio: 16 / 9;
 }
